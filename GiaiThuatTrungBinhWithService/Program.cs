@@ -12,6 +12,7 @@ namespace GiaiThuatTrungBinhWithService
         {
             ExamForTrungBinh service = new ExamForTrungBinh();
             string[] input = new string[13];
+            //get data
             String get_result = service.getInputData("thangnd", "1", 1, 2, ref input);
             Console.WriteLine(get_result);
             for (int i = 0; i < input.Length; i++)
@@ -19,6 +20,7 @@ namespace GiaiThuatTrungBinhWithService
                 Console.WriteLine(input[i]);
             }
             string[] output = GiaiThuatTrungBinh(input);
+            //submit
             String result = service.submit("thangnd", "1", 1, 2, output);
             Console.WriteLine(result);
 
@@ -32,6 +34,7 @@ namespace GiaiThuatTrungBinhWithService
         static string[] GiaiThuatTrungBinh(string[] input)
         {
             string[] result = new string[input.Length];
+            // get year-month-day
             string pre_str = input[0].Trim().Split(' ')[0];
 
             int n = input.Length;
@@ -56,27 +59,30 @@ namespace GiaiThuatTrungBinhWithService
                 newTimeMsArr.Clear();
                 for (int j = 0; j < n; j++)
                 {
+                    // add \ {self}
                     if (j != i)
                     {
                         newTimeMsArr.Add(timeToMsArr[j]);
                     }
                 }
                 newTimeMsArr.Sort();
+                // remove max, min
                 newTimeMsArr.RemoveAt(0);
                 newTimeMsArr.RemoveAt(newTimeMsArr.Count - 1);
 
                 double sum = 0;
                 int avg = 0;
-
+                //cald sum
                 for (int k = 0; k < newTimeMsArr.Count; k++)
                 {
                     sum += newTimeMsArr[k];
                 }
-
+                //calc average
                 avg = (int) Math.Round(sum/ newTimeMsArr.Count, MidpointRounding.AwayFromZero);
+                
                 result_ms[i] = avg;
             }
-
+            // convert to "yyyy-mm-dd hh:mm:ss.xxx"
             for (int i = 0; i < n; i++)
             {
                 int hour = result_ms[i] / (60 * 60 * 1000);

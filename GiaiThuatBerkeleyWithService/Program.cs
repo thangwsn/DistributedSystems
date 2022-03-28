@@ -12,13 +12,14 @@ namespace GiaiThuatBerkeleyWithService
         {
             ExamForBerkeley service = new ExamForBerkeley();
             string[] input;
+            //get data
             string get_data = service.getInputData("thangnd", "1", 1, 1, out input);
             Console.WriteLine(get_data);
             for (int i = 0; i < input.Length; i++)
             {
                 Console.WriteLine(input[i]);
             }
-
+            // calc difference vs coordiante, = member - coordinate
             int[] differ_vs_coordinate = new int[input.Length];
             double sum = 0;
             for (int i = 0; i < input.Length; i++)
@@ -26,24 +27,27 @@ namespace GiaiThuatBerkeleyWithService
                 differ_vs_coordinate[i] = differ(input[i], input[0]);
                 sum += differ_vs_coordinate[i];
             }
+            // calc average from differ array
             int avg = (int) Math.Round(sum / differ_vs_coordinate.Length, MidpointRounding.AwayFromZero);
-            // control
+            // control time
             int[] result = new int[input.Length];
             for (int i = 0; i < input.Length; i++)
             {
                 result[i] = avg - differ_vs_coordinate[i];
             }
             int finalTime_ms = TimeToMiliSecond(input[0]) + result[0];
-            // extract to final time
+            // extract to corrected date time "yyyy-mm-dd hh:mm:ss.xxx"
             int hour = finalTime_ms / (60 * 60 * 1000);
             int min = finalTime_ms % (60 * 60 * 1000) / (60 * 1000);
             int sec = finalTime_ms % (60 * 1000) / 1000;
             int ms = finalTime_ms % 1000;
+         
             string correctedDateTime = input[0].Trim().Split(' ')[0] + " "
                                     + (hour < 10 ? ("0" + hour.ToString()) : hour.ToString()) + ":"
                                     + (min < 10 ? ("0" + min.ToString()) : min.ToString()) + ":"
                                     + (sec < 10 ? ("0" + sec.ToString()) : sec.ToString()) + "."
                                     + (ms < 10 ? ("00" + ms.ToString()) : (ms < 100 ? ("0" + ms.ToString()) : ms.ToString()));
+            //submit
             string point = service.submit("thangnd", "1", 1, 1, result, correctedDateTime);
             
             Console.WriteLine(point);
@@ -63,7 +67,7 @@ namespace GiaiThuatBerkeleyWithService
         }  
         
         private static int TimeToMiliSecond(string t1)
-        {
+        {   // get time part
             string time_str_1 = t1.Trim().Split(' ')[1];
             //07:55:02.239
             int time1 = Int32.Parse(time_str_1.Substring(0, 2)) * 60 * 60 * 1000
