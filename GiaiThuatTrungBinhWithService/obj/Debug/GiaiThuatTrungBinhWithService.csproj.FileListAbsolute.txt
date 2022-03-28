@@ -1,0 +1,7 @@
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\obj\Debug\GiaiThuatTrungBinhWithService.csproj.AssemblyReference.cache
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\obj\Debug\GiaiThuatTrungBinhWithService.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\bin\Debug\GiaiThuatTrungBinhWithService.exe.config
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\bin\Debug\GiaiThuatTrungBinhWithService.exe
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\bin\Debug\GiaiThuatTrungBinhWithService.pdb
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\obj\Debug\GiaiThuatTrungBinhWithService.exe
+C:\Users\Lenovo\source\repos\GiaiThuatTrungBinhWithService\obj\Debug\GiaiThuatTrungBinhWithService.pdb

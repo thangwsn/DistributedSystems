@@ -1,0 +1,7 @@
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\bin\Debug\GiaiThuatBerkeleyWithService.exe.config
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\bin\Debug\GiaiThuatBerkeleyWithService.exe
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\bin\Debug\GiaiThuatBerkeleyWithService.pdb
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\obj\Debug\GiaiThuatBerkeleyWithService.csproj.AssemblyReference.cache
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\obj\Debug\GiaiThuatBerkeleyWithService.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\obj\Debug\GiaiThuatBerkeleyWithService.exe
+C:\Users\Lenovo\source\repos\GiaiThuatBerkeleyWithService\obj\Debug\GiaiThuatBerkeleyWithService.pdb
