@@ -13,7 +13,7 @@ namespace GiaiThuatTrungBinhWithService
             ExamForTrungBinh service = new ExamForTrungBinh();
             string[] input = new string[13];
             //get data
-            String get_result = service.getInputData("thangnd", "1", 1, 2, ref input);
+            String get_result = service.getInputData("anonymous", "anonymous", 1, 7, ref input);
             Console.WriteLine(get_result);
             for (int i = 0; i < input.Length; i++)
             {
@@ -21,7 +21,7 @@ namespace GiaiThuatTrungBinhWithService
             }
             string[] output = GiaiThuatTrungBinh(input);
             //submit
-            String result = service.submit("thangnd", "1", 1, 2, output);
+            String result = service.submit("anonymous", "anonymous", 1, 7, output);
             Console.WriteLine(result);
 
             for (int i = 0; i < output.Length; i++)
@@ -33,69 +33,52 @@ namespace GiaiThuatTrungBinhWithService
 
         static string[] GiaiThuatTrungBinh(string[] input)
         {
-            string[] result = new string[input.Length];
-            // get year-month-day
-            string pre_str = input[0].Trim().Split(' ')[0];
+            string format = "yyyy-MM-dd HH:mm:ss.fff";
 
             int n = input.Length;
-            int[] timeToMsArr = new int[n];
+            List<DateTime> inputDateTime = new List<DateTime>();
 
-            // convert time to ms
+            // convert string to datetime
             for (int i = 0; i < n; i++)
             {
-                string time_str = input[i].Trim().Split(' ')[1];
-                // 2021-06-30 01:01:42.010
-                timeToMsArr[i] = Int32.Parse(time_str.Substring(0, 2)) * 60 * 60 * 1000
-                                + Int32.Parse(time_str.Substring(3, 2)) * 60 * 1000
-                                + Int32.Parse(time_str.Substring(6, 2)) * 1000
-                                + Int32.Parse(time_str.Substring(9, 3));
+                DateTime dateTime = DateTime.Parse(input[i]);
+                inputDateTime.Add(dateTime);
             }
 
             // calc
-            List<int> newTimeMsArr = new List<int>();
-            int[] result_ms = new int[n];
+            List<DateTime> newDateTime = new List<DateTime>();
+            DateTime[] result_date = new DateTime[n];
             for (int i = 0; i < n; i++)
             {
-                newTimeMsArr.Clear();
+                newDateTime.Clear();
                 for (int j = 0; j < n; j++)
                 {
                     // add \ {self}
                     if (j != i)
                     {
-                        newTimeMsArr.Add(timeToMsArr[j]);
+                        newDateTime.Add(inputDateTime[j]);
                     }
                 }
-                newTimeMsArr.Sort();
+                newDateTime.Sort();
                 // remove max, min
-                newTimeMsArr.RemoveAt(0);
-                newTimeMsArr.RemoveAt(newTimeMsArr.Count - 1);
+                newDateTime.RemoveAt(0);
+                newDateTime.RemoveAt(newDateTime.Count - 1);
 
                 double sum = 0;
-                int avg = 0;
+                long avg = 0;
                 //cald sum
-                for (int k = 0; k < newTimeMsArr.Count; k++)
+                for (int k = 0; k < newDateTime.Count; k++)
                 {
-                    sum += newTimeMsArr[k];
+                    sum += newDateTime[k].Ticks;
                 }
                 //calc average
-                avg = (int) Math.Round(sum/ newTimeMsArr.Count, MidpointRounding.AwayFromZero);
-                
-                result_ms[i] = avg;
+                avg = (long) Math.Round(sum / (newDateTime.Count*10000), 0, MidpointRounding.AwayFromZero);
+                result_date[i] = new DateTime(avg*10000);
             }
-            // convert to "yyyy-mm-dd hh:mm:ss.xxx"
+            string[] result = new string[n];
             for (int i = 0; i < n; i++)
             {
-                int hour = result_ms[i] / (60 * 60 * 1000);
-                int min = result_ms[i] % (60 * 60 * 1000) / (60 * 1000);
-                int sec = result_ms[i] % (60 * 1000) / 1000;
-                int ms = result_ms[i] % 1000;
-
-                string res = pre_str + " "
-                            + (hour < 10 ? ("0" + hour.ToString()) : hour.ToString()) + ":"
-                            + (min < 10 ? ("0" + min.ToString()) : min.ToString()) + ":"
-                            + (sec < 10 ? ("0" + sec.ToString()) : sec.ToString()) + "."
-                            + (ms < 10 ? ("00" + ms.ToString()) : (ms < 100 ? ("0"+ ms.ToString()) : ms.ToString() ));
-                result[i] = res;
+                result[i] = result_date[i].ToString(format);
             }
             return result;
         }    

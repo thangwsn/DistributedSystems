@@ -19,37 +19,32 @@ namespace GiaiThuatBerkeleyWithService
             {
                 Console.WriteLine(input[i]);
             }
-            // calc difference vs coordiante, = member - coordinate
-            int[] differ_vs_coordinate = new int[input.Length];
-            double sum = 0;
-            for (int i = 0; i < input.Length; i++)
+            int n = input.Length;
+            //convert string to datetime
+            string format = "yyyy-MM-dd HH:mm:ss.fff";
+            DateTime[] inputDateTime = new DateTime[n];
+            for (int i = 0; i < n; i++)
             {
-                differ_vs_coordinate[i] = differ(input[i], input[0]);
-                sum += differ_vs_coordinate[i];
+                inputDateTime[i] = DateTime.Parse(input[i]);
+            }
+            // calc sum of all (difference vs coordiante, = member - coordinate)
+            double sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                sum += (inputDateTime[i].Ticks - inputDateTime[0].Ticks) / 10000;
             }
             // calc average from differ array
-            int avg = (int) Math.Round(sum / differ_vs_coordinate.Length, MidpointRounding.AwayFromZero);
-            // control time
-            int[] result = new int[input.Length];
-            for (int i = 0; i < input.Length; i++)
+            int avg = (int) Math.Round(sum * 1.0/ n, 0, MidpointRounding.AwayFromZero);
+            // final time  
+            DateTime correctedDateTime = inputDateTime[0].AddMilliseconds(avg);
+            //control
+            int[] result = new int[n];
+            for (int i = 0; i < n; i++)
             {
-                result[i] = avg - differ_vs_coordinate[i];
+                result[i] = (int)((correctedDateTime.Ticks - inputDateTime[i].Ticks) / 10000);
             }
-            int finalTime_ms = TimeToMiliSecond(input[0]) + result[0];
-            // extract to corrected date time "yyyy-mm-dd hh:mm:ss.xxx"
-            int hour = finalTime_ms / (60 * 60 * 1000);
-            int min = finalTime_ms % (60 * 60 * 1000) / (60 * 1000);
-            int sec = finalTime_ms % (60 * 1000) / 1000;
-            int ms = finalTime_ms % 1000;
-         
-            string correctedDateTime = input[0].Trim().Split(' ')[0] + " "
-                                    + (hour < 10 ? ("0" + hour.ToString()) : hour.ToString()) + ":"
-                                    + (min < 10 ? ("0" + min.ToString()) : min.ToString()) + ":"
-                                    + (sec < 10 ? ("0" + sec.ToString()) : sec.ToString()) + "."
-                                    + (ms < 10 ? ("00" + ms.ToString()) : (ms < 100 ? ("0" + ms.ToString()) : ms.ToString()));
             //submit
-            string point = service.submit("thangnd", "1", 1, 1, result, correctedDateTime);
-            
+            string point = service.submit("thangnd", "1", 1, 1, result, correctedDateTime.ToString(format));
             Console.WriteLine(point);
             for (int i = 0; i < result.Length; i++)
             {
@@ -57,24 +52,6 @@ namespace GiaiThuatBerkeleyWithService
             }
             Console.WriteLine(correctedDateTime);
             Console.ReadKey();
-        }
-
-        private static int differ(string t1, string t2)
-        {
-            int time1 = TimeToMiliSecond(t1);
-            int time2 = TimeToMiliSecond(t2);
-            return time1 - time2;
-        }  
-        
-        private static int TimeToMiliSecond(string t1)
-        {   // get time part
-            string time_str_1 = t1.Trim().Split(' ')[1];
-            //07:55:02.239
-            int time1 = Int32.Parse(time_str_1.Substring(0, 2)) * 60 * 60 * 1000
-                        + Int32.Parse(time_str_1.Substring(3, 2)) * 60 * 1000
-                        + Int32.Parse(time_str_1.Substring(6, 2)) * 1000
-                        + Int32.Parse(time_str_1.Substring(9, 3));
-            return time1;
         }
     }
 }
